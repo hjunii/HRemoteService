@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -51,7 +52,8 @@ public class MyService extends Service {
             initializeRegistrationListener();
             NsdServiceInfo serviceInfo  = new NsdServiceInfo();
             serviceInfo.setPort(mPort);
-            serviceInfo.setServiceName(mServiceName);
+            String serviceName = Build.HOST + "(" + mServiceName + ")";
+            serviceInfo.setServiceName(serviceName);
             serviceInfo.setServiceType(SERVICE_TYPE);
             mNsdManager.registerService(serviceInfo, NsdManager.PROTOCOL_DNS_SD, mRegistrationListener);
         }
