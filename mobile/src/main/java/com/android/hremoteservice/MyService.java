@@ -133,8 +133,10 @@ public class MyService extends Service {
                 mServerSocket = new ServerSocket(0);
                 mPort = mServerSocket.getLocalPort();
 
+                SimpleUinput uinput = new SimpleUinput();
+
                 while (!Thread.currentThread().isInterrupted()) {
-                    mSocket = (Socket) mServerSocket.accept();
+                    mSocket = mServerSocket.accept();
 
                     try {
                         DataInputStream in = new DataInputStream(mSocket.getInputStream());
@@ -142,6 +144,8 @@ public class MyService extends Service {
                         while (!Thread.currentThread().isInterrupted()) {
                             int keyCode = in.readInt();
                             Log.d(TAG, "KeyCode: " + keyCode);
+
+                            uinput.send((short) 0, (short) 0, 0);
                         }
                     } catch(Exception e) {
                         Log.e(TAG, "Error ", e);
