@@ -133,19 +133,21 @@ public class MyService extends Service {
                 mServerSocket = new ServerSocket(0);
                 mPort = mServerSocket.getLocalPort();
 
-                SimpleUinput uinput = new SimpleUinput();
-
                 while (!Thread.currentThread().isInterrupted()) {
                     mSocket = mServerSocket.accept();
 
                     try {
                         DataInputStream in = new DataInputStream(mSocket.getInputStream());
+                        SimpleUinput uinput = new SimpleUinput();
 
                         while (!Thread.currentThread().isInterrupted()) {
-                            int keyCode = in.readInt();
-                            Log.d(TAG, "KeyCode: " + keyCode);
+                            short type = in.readShort();
+                            short code = in.readShort();
+                            int value = in.readInt();
 
-                            uinput.send((short) 0, (short) 0, 0);
+                            Log.d(TAG, "type: " + type + " code: " + code + " value: " + value );
+
+                            uinput.send(type, code, value);
                         }
                     } catch(Exception e) {
                         Log.e(TAG, "Error ", e);

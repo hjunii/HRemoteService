@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HRemoteService</string>
+    <string name="root_need_msg">Root permission is required</string>
 </resources>
