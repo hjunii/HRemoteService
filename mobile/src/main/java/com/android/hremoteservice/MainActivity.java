@@ -2,12 +2,14 @@ package com.android.hremoteservice;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -36,9 +38,13 @@ public class MainActivity extends AppCompatActivity {
             try
             {
                 Process sh = Runtime.getRuntime().exec("su");
-                OutputStream os = sh.getOutputStream();
-                os.write("chmod 666 /dev/uinput".getBytes());
-            } catch (IOException e) {
+                DataOutputStream os = new DataOutputStream(sh.getOutputStream());
+                os.writeBytes("chmod 666 /dev/uinput");
+                os.writeBytes("\nexit\n");
+                os.flush();
+                sh.waitFor();
+            } catch (Exception e) {
+                Log.e("HRemoteService", e.getMessage());
                 Toast toast = Toast.makeText(getApplicationContext(),
                         getResources().getString(R.string.root_need_msg), Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -59,9 +65,12 @@ public class MainActivity extends AppCompatActivity {
             try
             {
                 Process sh = Runtime.getRuntime().exec("su");
-                OutputStream os = sh.getOutputStream();
-                os.write("chmod 660 /dev/uinput".getBytes());
-            } catch (IOException e) {
+                DataOutputStream os = new DataOutputStream(sh.getOutputStream());
+                os.writeBytes("chmod 660 /dev/uinput");
+                os.writeBytes("\nexit\n");
+                os.flush();
+                sh.waitFor();
+            } catch (Exception e) {
             }
 
             stopService(new Intent(MainActivity.this, MyService.class));
