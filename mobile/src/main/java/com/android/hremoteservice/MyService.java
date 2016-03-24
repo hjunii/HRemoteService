@@ -136,23 +136,30 @@ public class MyService extends Service {
                 while (!Thread.currentThread().isInterrupted()) {
                     mSocket = mServerSocket.accept();
 
+                    SimpleUHID uhid = null;
                     try {
                         DataInputStream in = new DataInputStream(mSocket.getInputStream());
-                        SimpleUinput uinput = new SimpleUinput();
+                        uhid = new SimpleUHID();
 
                         while (!Thread.currentThread().isInterrupted()) {
-                            short type = in.readShort();
-                            short code = in.readShort();
-                            int value = in.readInt();
+                            boolean btn1Down = in.readBoolean();
+                            boolean btn2Down = in.readBoolean();
+                            boolean btn3Down = in.readBoolean();
+                            short absX = in.readShort();
+                            short absY = in.readShort();
+                            short wheel = in.readShort();
 
-                            Log.d(TAG, "type: " + type + " code: " + code + " value: " + value );
+                            Log.d(TAG, "btn1Down: " + btn1Down + " btn2Down: " + btn2Down + " btn3Down: " + btn3Down + " absX: " + absX + " absY: " + absY + " wheel: " + wheel );
 
-                            uinput.send(type, code, value);
+                            uhid.sendEvent(btn1Down, btn2Down, btn3Down, absX, absY, wheel);
                         }
                     } catch(Exception e) {
                         Log.e(TAG, "Error ", e);
                     } finally {
                         mSocket.close();
+                        try {
+                            uhid.finalize();
+                        } catch (Throwable e) {}
                         Log.d(TAG, "Done");
                     }
                 }

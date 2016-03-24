@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 Process sh = Runtime.getRuntime().exec("su");
                 DataOutputStream os = new DataOutputStream(sh.getOutputStream());
-                os.writeBytes("chmod 666 /dev/uinput");
+                os.writeBytes("chmod 666 /dev/uhid");
                 os.writeBytes("\nexit\n");
                 os.flush();
                 sh.waitFor();
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 Process sh = Runtime.getRuntime().exec("su");
                 DataOutputStream os = new DataOutputStream(sh.getOutputStream());
-                os.writeBytes("chmod 660 /dev/uinput");
+                os.writeBytes("chmod 660 /dev/uhid");
                 os.writeBytes("\nexit\n");
                 os.flush();
                 sh.waitFor();

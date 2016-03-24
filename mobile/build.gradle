@@ -21,7 +21,7 @@ model {
          }
 
         ndk {
-            moduleName "jniSimpleUinput"
+            moduleName "jniSimpleUHID"
             ldLibs.add("log")
         }
     }
